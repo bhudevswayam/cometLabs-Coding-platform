@@ -114,7 +114,7 @@ router.post('/refresh', (req, res) => {
 })
 
 // display all questions
-router.get('/   ', authenticateToken, async (req, res) => {
+router.get('/display-questions', authenticateToken, async (req, res) => {
     // is user admin
     if (req.user.role == 'admin') {
         // get directly from sphere api
