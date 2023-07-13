@@ -11,9 +11,9 @@ require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 let refreshTokens = []
-const PROBLEM_URL = process.env.PROBLEM_URL
-const TOKEN = process.env.TOKEN
-const SUBMISSION_URL = process.env.SUBMISSION_URL
+// const  = process.env.
+const TOKEN = '19b1dadad62eb0897d13bf04efa3bdb1'
+const SUBMISSION_URL = 'https://76701661.problems.sphere-engine.com/api/v3/submissions'
 
 
 
@@ -119,7 +119,7 @@ router.get('/display-questions', authenticateToken, async (req, res) => {
     // is user admin
     if (req.user.role == 'admin') {
         // get directly from sphere api
-        await axios.get(PROBLEM_URL + '?access_token=' + TOKEN).then(response => {
+        await axios.get('https://76701661.problems.sphere-engine.com/api/v4/problems' + '?access_token=' + TOKEN).then(response => {
             res.send(response.data)
         }).catch(err => {
             res.status(400).send(err)
@@ -136,7 +136,7 @@ router.get('/admin-uploaded-questions', authenticateToken, async (req, res) => {
         let questionsList = []
         await Question.find().then(async (questions) => {
             for (let i = 0; i < questions.length; i++) {
-                await axios.get(PROBLEM_URL + '/' + questions[i].id + '?access_token=' + TOKEN).then(response => {
+                await axios.get('https://76701661.problems.sphere-engine.com/api/v4/problems' + '/' + questions[i].id + '?access_token=' + TOKEN).then(response => {
                     questionsList.push(response.data)
                 }).catch(err => {
                     res.send(err)
@@ -160,7 +160,7 @@ router.post('/add-new-question', authenticateToken, async (req, res) => {
         if (req.body.name == null || req.body.description == null) {
             return res.status(400).send('Missing required fields')
         } else {
-            await axios.post(PROBLEM_URL + '?access_token=' + TOKEN, {
+            await axios.post('https://76701661.problems.sphere-engine.com/api/v4/problems' + '?access_token=' + TOKEN, {
                 "name": req.body.name,
                 "body": req.body.description,
                 "masterjudgeId": 1001
@@ -182,7 +182,7 @@ router.post('/add-new-question', authenticateToken, async (req, res) => {
 router.post('/update-question', authenticateToken, async (req, res) => {
     if (req.user.role == 'admin') {
         // get previous question data from sphere api
-        await axios.get(PROBLEM_URL + '/' + req.body.id + '?access_token=' + TOKEN).then(response => {
+        await axios.get('https://76701661.problems.sphere-engine.com/api/v4/problems' + '/' + req.body.id + '?access_token=' + TOKEN).then(response => {
             // if required fields are empty overwrite with previous data
             if (req.body.name == null) {
                 req.body.name = response.data.name
@@ -191,7 +191,7 @@ router.post('/update-question', authenticateToken, async (req, res) => {
                 req.body.description = response.data.body
             }
         })
-        await axios.put(PROBLEM_URL + '/' + req.body.id + '?access_token=' + TOKEN, {
+        await axios.put('https://76701661.problems.sphere-engine.com/api/v4/problems' + '/' + req.body.id + '?access_token=' + TOKEN, {
             "name": req.body.name,
             "body": req.body.description
         }).then(response => {
@@ -207,7 +207,7 @@ router.post('/update-question', authenticateToken, async (req, res) => {
 // deleting questions
 router.post('/delete-question', authenticateToken, async (req, res) => {
     if (req.user.role == 'admin') {
-        await axios.delete(PROBLEM_URL + '/' + req.body.id + '?access_token=' + TOKEN).then(async (response) => {
+        await axios.delete('https://76701661.problems.sphere-engine.com/api/v4/problems' + '/' + req.body.id + '?access_token=' + TOKEN).then(async (response) => {
             await Question.deleteOne({ id: req.body.id })
             return res.send(response.data)
         }).catch(err => {
@@ -220,7 +220,7 @@ router.post('/delete-question', authenticateToken, async (req, res) => {
 
 router.post('/preLoded-testcases', authenticateToken, async (req, res) => {
     if (req.user.role == 'admin') {
-        await axios.get(PROBLEM_URL + '/' + req.body.id + '/' + 'testcases?access_token=' + TOKEN).then(response => {
+        await axios.get('https://76701661.problems.sphere-engine.com/api/v4/problems' + '/' + req.body.id + '/' + 'testcases?access_token=' + TOKEN).then(response => {
             res.send(response.data)
         }).catch(err => {
             res.status(400).send(err)
@@ -232,7 +232,7 @@ router.post('/preLoded-testcases', authenticateToken, async (req, res) => {
 
 router.post('/add-testcases', authenticateToken, async (req, res) => {
     if (req.user.role == 'admin') {
-        await axios.post(PROBLEM_URL + '/' + req.body.id + '/' + 'testcases?access_token=' + TOKEN, {
+        await axios.post('https://76701661.problems.sphere-engine.com/api/v4/problems' + '/' + req.body.id + '/' + 'testcases?access_token=' + TOKEN, {
             "input": req.body.input,
             "output": req.body.output,
             "judgeId": 1
@@ -248,7 +248,7 @@ router.post('/add-testcases', authenticateToken, async (req, res) => {
 
 router.post('/update-testcases', authenticateToken, async (req, res) => {
     if (req.user.role == 'admin') {
-        await axios.put(PROBLEM_URL + '/' + req.body.id + '/' + 'testcases/' + req.body.number + '?access_token=' + TOKEN, {
+        await axios.put('https://76701661.problems.sphere-engine.com/api/v4/problems' + '/' + req.body.id + '/' + 'testcases/' + req.body.number + '?access_token=' + TOKEN, {
             "input": req.body.input,
             "output": req.body.output
         }).then(response => {
