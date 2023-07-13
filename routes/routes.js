@@ -18,7 +18,6 @@ const SUBMISSION_URL = 'https://76701661.problems.sphere-engine.com/api/v3/submi
 
 
 
-
 router.get('/', authenticateToken, (req, res) => {
     // middleware to differentiate admins from participants.
     res.send(`You are ${req.user.role}, ${req.user.name}`)
@@ -115,7 +114,7 @@ router.post('/refresh', (req, res) => {
 })
 
 // display all questions
-router.get('/display-questions', authenticateToken, async (req, res) => {
+router.get('/   ', authenticateToken, async (req, res) => {
     // is user admin
     if (req.user.role == 'admin') {
         // get directly from sphere api

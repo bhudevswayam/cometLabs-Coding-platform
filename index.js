@@ -1,11 +1,11 @@
 // Imports
 const bodyParser = require('body-parser');
 const express = require('express');
-
+const cors = require('cors');
 require('./db/conn');
 
 const router = require('./routes/routes');
-
+app.use(cors)
 // load .env
 require('dotenv').config();
 
