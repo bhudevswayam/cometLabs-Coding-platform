@@ -44,7 +44,7 @@ router.post('/signup', async (req, res) => {
         const accessToken = accessTokenGenerator(user)
         const refreshToken = refreshTokenGenerator(user)
 
-        res.send({ email: user.email, accessToken: accessToken, refreshToken: refreshToken })
+        res.status(200).json({ email: user.email, accessToken: accessToken, refreshToken: refreshToken })
     }).catch(err => {
         res.status(400).send(err)
     })
