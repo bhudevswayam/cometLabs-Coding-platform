@@ -13,7 +13,7 @@ const bcrypt = require('bcrypt')
 let refreshTokens = []
 // const  = process.env.
 const TOKEN = '19b1dadad62eb0897d13bf04efa3bdb1'
-const SUBMISSION_URL = 'https://76701661.problems.sphere-engine.com/api/v3/submissions'
+const SUBMISSION_URL = 'https://76701661.problems.sphere-engine.com/api/v4/submissions'
 
 
 
@@ -208,7 +208,7 @@ router.post('/delete-question', authenticateToken, async (req, res) => {
     if (req.user.role == 'admin') {
         await axios.delete('https://76701661.problems.sphere-engine.com/api/v4/problems' + '/' + req.body.id + '?access_token=' + TOKEN).then(async (response) => {
             await Question.deleteOne({ id: req.body.id })
-            return res.send(response.data)
+            return res.send(`test case Deleted`)
         }).catch(err => {
             res.status(400).send(err)
         })
@@ -251,7 +251,7 @@ router.post('/update-testcases', authenticateToken, async (req, res) => {
             "input": req.body.input,
             "output": req.body.output
         }).then(response => {
-            res.send(response.data)
+            res.send(`test case Updated`)
         }).catch(err => {
             res.status(400).send(err)
         })
@@ -315,14 +315,6 @@ router.post('/list-question-submissions', authenticateToken, async (req, res) =>
     }
 })
 
-// router.get('/listSelfSubmissions', authenticateToken, async (req, res) => {
-//     await Submission.find({ userEmail: req.user.email }).then(async (submissions) => {
-//         res.send(submissions)
-//     }).catch(err => {
-//         res.status(400).send(err)
-//     })
-// })
-
 // Submission takes time to run so check every second for the result
 async function saveSubmissionResult(response, req, res) {
     if (response.data.result.status.name == 'compiling...') {
@@ -356,7 +348,7 @@ function accessTokenGenerator(user) {
             role: user.role
         },
         process.env.JWT_ACCESS_TOKEN,
-        { expiresIn: '10m' }
+        { expiresIn: '59m' }
     )
 }
 
